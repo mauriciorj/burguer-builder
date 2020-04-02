@@ -1,9 +1,9 @@
 # Udemy - React - The Complete Guide (incl Hooks, React Router, Redux) #
-<br /><br />
+
 ## Project: Burguer Builder ##
-<br /><br />
+
 React Project Initializated:
-<br /><br />
+
 ```javascript
 npx create-react-app my-app 
 ```
