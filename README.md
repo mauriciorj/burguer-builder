@@ -8,7 +8,7 @@ React Project Initializated:
 npx create-react-app my-app 
 ```
 
-** Specification **
+**Specification**
 <br /><br />
 react-scripts: 3.4.1<br />
 npm version: 6.13.4<br />
