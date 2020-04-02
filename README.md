@@ -7,7 +7,7 @@ React Project Initializated:
 ```javascript
 npx create-react-app my-app 
 ```
-<br /><br />
+
 ** Specification **
 <br /><br />
 react-scripts: 3.4.1<br />
