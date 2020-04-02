@@ -60,8 +60,12 @@ class BurguerBuilder extends Component {
         }
     }
 
-    purchaseHandler = () =>{
+    purchaseHandler = () => {
         this.setState({purchasing: true});
+    }
+
+    purchaseCancelHandler = () => {
+        this.setState({purchasing: false})
     }
 
     render() {
@@ -78,7 +82,7 @@ class BurguerBuilder extends Component {
         return (
             <Aux>                
                 <Burguer ingredients={this.state.ingredients} />
-                <Modal show={this.state.purchasing}>
+                <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
                     <OrderSummary ingredients={this.state.ingredients} />
                 </Modal>
                 <BuildControls
