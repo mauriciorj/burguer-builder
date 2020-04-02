@@ -4,7 +4,7 @@
 
 React Project Initializated:
 
-```
+```javascript
 npx create-react-app my-app 
 ```
 
