@@ -5,6 +5,7 @@ import BuildControls from '../../components/Burguer/BuildControls/BuildControls'
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burguer/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import WithErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../axios-order';
 
 
@@ -146,4 +147,4 @@ class BurguerBuilder extends Component {
 
 }
 
-export default BurguerBuilder;
+export default WithErrorHandler(BurguerBuilder, axios);
