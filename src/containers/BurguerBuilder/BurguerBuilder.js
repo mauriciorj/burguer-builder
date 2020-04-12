@@ -18,14 +18,24 @@ class BurguerBuilder extends Component {
         error: false
     }
 
-    updatePurchaseState(ingredients){
+    componentDidMount() {
+        axios.get('https://burguer-builder-10146.firebaseio.com/ingredients.json')
+            .then(response => {
+                this.setState({ ingredients: response.data });
+            })
+            .catch(error => {
+                this.setState({ error: true });
+            });
+    }
+
+    updatePurchaseState(ingredients) {
         const sum = Object.keys(ingredients)
-        .map(igKey => {
-            return ingredients[igKey];
-        })
-        .reduce((sum, el) => {
-            return sum +el;
-        }, 0 );
+            .map(igKey => {
+                return ingredients[igKey];
+            })
+            .reduce((sum, el) => {
+                return sum + el;
+            }, 0);
         return sum > 0 ? false : true;
     }
 
@@ -72,7 +82,7 @@ class BurguerBuilder extends Component {
                         totalPrice={this.props.price} />
                 </Aux>
             );
-            orderSummary = 
+            orderSummary =
                 <OrderSummary
                     ingredients={this.props.ings}
                     purchaseCancelled={this.purchaseCancelledHandler}
@@ -96,15 +106,15 @@ class BurguerBuilder extends Component {
 
 }
 
-const mapStateToProps = state =>{
-    return{
+const mapStateToProps = state => {
+    return {
         ings: state.ingredients,
         price: state.totalPrice
     }
 }
 
 const mapDispatchToProps = dispatch => {
-    return{
+    return {
         onIngredientAdded: (igName) => dispatch(burguerBuilderActions.addIngredients(igName)),
         onIngredientRemoved: (igName) => dispatch(burguerBuilderActions.removeIngredients(igName))
     }
