@@ -10,17 +10,9 @@ import WithErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../axios-order';
 import * as actionTypes from '../../store/actions';
 
-const INGREDIENT_PRICES = {
-    salad: 0.5,
-    cheese: 0.4,
-    meat: 1.3,
-    bacon: 0.7
-}
-
 class BurguerBuilder extends Component {
 
     state = {
-        totalPrice: 4,
         purchasable: false,
         purchasing: false,
         loading: false,
@@ -37,39 +29,39 @@ class BurguerBuilder extends Component {
         //     });
     }
 
-    addIngredientHandler = (type) => {
-        const oldCount = this.state.ingredients[type];
-        const updateCount = oldCount + 1;
-        const updateIngredients = {
-            ...this.state.ingredients
-        };
-        updateIngredients[type] = updateCount;
+    // addIngredientHandler = (type) => {
+    //     const oldCount = this.state.ingredients[type];
+    //     const updateCount = oldCount + 1;
+    //     const updateIngredients = {
+    //         ...this.state.ingredients
+    //     };
+    //     updateIngredients[type] = updateCount;
 
-        const priceAddition = INGREDIENT_PRICES[type];
-        const oldPrice = this.state.totalPrice;
-        const newPrice = oldPrice + priceAddition;
+    //     const priceAddition = INGREDIENT_PRICES[type];
+    //     const oldPrice = this.state.totalPrice;
+    //     const newPrice = oldPrice + priceAddition;
 
-        this.setState({ totalPrice: newPrice, ingredients: updateIngredients });
-    }
+    //     this.setState({ totalPrice: newPrice, ingredients: updateIngredients });
+    // }
 
-    remIngredienthandler = (type) => {
-        const oldCount = this.state.ingredients[type];
-        if (oldCount > 0) {
-            const updateCount = oldCount - 1;
-            const updateIngredients = {
-                ...this.state.ingredients
-            };
-            updateIngredients[type] = updateCount;
+    // remIngredienthandler = (type) => {
+    //     const oldCount = this.state.ingredients[type];
+    //     if (oldCount > 0) {
+    //         const updateCount = oldCount - 1;
+    //         const updateIngredients = {
+    //             ...this.state.ingredients
+    //         };
+    //         updateIngredients[type] = updateCount;
 
-            const priceReduce = INGREDIENT_PRICES[type];
-            const oldPrice = this.state.totalPrice;
-            const newPrice = oldPrice - priceReduce;
+    //         const priceReduce = INGREDIENT_PRICES[type];
+    //         const oldPrice = this.state.totalPrice;
+    //         const newPrice = oldPrice - priceReduce;
 
-            this.setState({ totalPrice: newPrice, ingredients: updateIngredients })
-        } else {
-            return
-        }
-    }
+    //         this.setState({ totalPrice: newPrice, ingredients: updateIngredients })
+    //     } else {
+    //         return
+    //     }
+    // }
 
     purchaseHandler = () => {
         this.setState({ purchasing: true });
@@ -131,7 +123,7 @@ class BurguerBuilder extends Component {
                         disabled={disableInfo}
                         purchasable={this.state.purchasable}
                         ordered={this.purchaseHandler}
-                        totalPrice={this.state.totalPrice} />
+                        totalPrice={this.props.price} />
                 </Aux>
             );
             orderSummary = 
@@ -139,7 +131,7 @@ class BurguerBuilder extends Component {
                     ingredients={this.props.ings}
                     purchaseCancelled={this.purchaseCancelledHandler}
                     purchaseContinued={this.purchaseContinuedHandler}
-                    totalPrice={this.state.totalPrice} />
+                    totalPrice={this.props.price} />
         }
 
         if (this.state.loading) {
@@ -160,7 +152,8 @@ class BurguerBuilder extends Component {
 
 const mapStateToProps = state =>{
     return{
-        ings: state.ingredients
+        ings: state.ingredients,
+        price: state.totalPrice
     }
 }
 
