@@ -4,8 +4,10 @@ import classes from './ContactData.module.css';
 import axios from '../../../axios-order';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import { connect } from 'react-redux';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+import * as actions from '../../../store/actions/index';
 
-class ContactData extends Component{
+class ContactData extends Component {
 
     state = {
         name: '',
@@ -13,14 +15,11 @@ class ContactData extends Component{
         address: {
             street: '',
             postalCode: ''
-        },
-        loading: false,
+        }
     }
 
     orderhandler = (event) => {
         event.preventDefault();
-
-        this.setState({ loading: true });
 
         const order = {
             ingredients: this.props.ings,
@@ -36,33 +35,24 @@ class ContactData extends Component{
                 email: 'teste@teste.com'
             }
         }
-        
-        axios.post('/orders.json', order)
-            .then(response => {
-                this.setState({ loading: false });
-                this.props.history.push('/');
-            })
-            .catch(error => {
-                this.setState({ loading: false });
-            });
-            console.log('ContactData -> ' + this.props.ingredients);
+        this.props.onOrderBurguer(order);
     }
 
-    render(){
-        let form = (                
-        <form>
-            <input type="text" name="name" placeholder="Your Name"></input>
-            <input type="email" name="email" placeholder="Your email"></input>
-            <input type="text" name="street" placeholder="Your Address"></input>
-            <input type="text" name="postal" placeholder="Your Postal Code"></input>
-            <Button btnType="Success" clicked={this.orderhandler}>FINISH ORDER</Button>
-        </form>);
+    render() {
+        let form = (
+            <form>
+                <input type="text" name="name" placeholder="Your Name"></input>
+                <input type="email" name="email" placeholder="Your email"></input>
+                <input type="text" name="street" placeholder="Your Address"></input>
+                <input type="text" name="postal" placeholder="Your Postal Code"></input>
+                <Button btnType="Success" clicked={this.orderhandler}>FINISH ORDER</Button>
+            </form>);
 
-        if(this.state.loading){
+        if (this.props.loading) {
             form = <Spinner />;
         }
 
-        return(
+        return (
             <div className={classes.ContactData}>
                 <h4>Enter your contact Info</h4>
                 {form}
@@ -72,11 +62,18 @@ class ContactData extends Component{
 
 }
 
-const mapStateToProps = state =>{
-    return{
-        ings: state.ingredients,
-        price: state.totalPrice
+const mapStateToProps = state => {
+    return {
+        ings: state.burguerBuilder.ingredients,
+        price: state.burguerBuilder.totalPrice,
+        loading: state.order.loading
     }
 }
 
-export default connect(mapStateToProps)(ContactData);
+const mapDispatchToProps = dispatch => {
+    return {
+        onOrderBurguer: (orderData) => dispatch(actions.purchaseBurguer(orderData))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));

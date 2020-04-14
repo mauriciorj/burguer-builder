@@ -14,18 +14,10 @@ class BurguerBuilder extends Component {
 
     state = {
         purchasing: false,
-        loading: false,
-        error: false
     }
 
-    componentDidMount() {
-        axios.get('https://burguer-builder-10146.firebaseio.com/ingredients.json')
-            .then(response => {
-                this.setState({ ingredients: response.data });
-            })
-            .catch(error => {
-                this.setState({ error: true });
-            });
+    componentDidMount(){
+        this.props.onInitIngredient();
     }
 
     updatePurchaseState(ingredients) {
@@ -53,6 +45,7 @@ class BurguerBuilder extends Component {
 
     purchaseContinuedHandler = () => {
         this.props.history.push('/checkout');
+        this.props.onInitPurchase();
     }
 
     render() {
@@ -67,7 +60,7 @@ class BurguerBuilder extends Component {
 
         let orderSummary = null;
 
-        let burger = this.state.error ? <h3>Ingredients can't be loaded :(</h3> : <Spinner />
+        let burger = this.props.error ? <h3>Ingredients can't be loaded :(</h3> : <Spinner />
 
         if (this.props.ings) {
             burger = (
@@ -108,15 +101,18 @@ class BurguerBuilder extends Component {
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients,
-        price: state.totalPrice
+        ings: state.burguerBuilder.ingredients,
+        price: state.burguerBuilder.totalPrice,
+        error: state.burguerBuilder.error
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         onIngredientAdded: (igName) => dispatch(burguerBuilderActions.addIngredients(igName)),
-        onIngredientRemoved: (igName) => dispatch(burguerBuilderActions.removeIngredients(igName))
+        onIngredientRemoved: (igName) => dispatch(burguerBuilderActions.removeIngredients(igName)),
+        onInitIngredient: () => dispatch(burguerBuilderActions.initIngredients()),
+        onInitPurchase: () => dispatch(burguerBuilderActions.purchaseInit())
     }
 }
 
