@@ -3,7 +3,9 @@ import { updateObject } from '../utility';
 
 const initialState = {
     ingredients: null,
-    totalPrice: 4
+    totalPrice: 4,
+    error: false,
+    building: false
 };
 
 const INGREDIENT_PRICES = {
@@ -21,7 +23,8 @@ const reducer = (state = initialState, action) => {
             const updatedIngredients = updateObject(state.ingredients, updateIngredient);
             const updatedState = {
                 ingredients: updatedIngredients,
-                totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName]
+                totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
+                building: true
             }
             return updateObject(state, updatedState);
 
@@ -40,7 +43,8 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 ingredients: action.ingredients,
                 error: false,
-                totalPrice: initialState.totalPrice
+                totalPrice: initialState.totalPrice,
+                building: false
             }
 
         case actionTypes.FECTH_INGREDIENTS_FAILED:

@@ -8,7 +8,7 @@ import OrderSummary from '../../components/Burguer/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import WithErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../axios-order';
-import * as burguerBuilderActions from '../../store/actions/index';
+import * as action from '../../store/actions/index';
 
 class BurguerBuilder extends Component {
 
@@ -32,7 +32,13 @@ class BurguerBuilder extends Component {
     }
 
     purchaseHandler = () => {
-        this.setState({ purchasing: true });
+        if(this.props.isAuthenticated){
+            this.setState({ purchasing: true });
+        }else{
+            this.props.onsetAuthRedirectPath('/checkout');
+            this.props.history.push('/auth');
+        }
+        
     }
 
     purchaseCancelHandler = () => {
@@ -44,8 +50,8 @@ class BurguerBuilder extends Component {
     }
 
     purchaseContinuedHandler = () => {
-        this.props.history.push('/checkout');
         this.props.onInitPurchase();
+        this.props.history.push('/checkout');
     }
 
     render() {
@@ -72,7 +78,8 @@ class BurguerBuilder extends Component {
                         disabled={disableInfo}
                         purchasable={this.updatePurchaseState(this.props.ings)}
                         ordered={this.purchaseHandler}
-                        totalPrice={this.props.price} />
+                        totalPrice={this.props.price}
+                        isAuth={this.props.isAuthenticated} />
                 </Aux>
             );
             orderSummary =
@@ -103,16 +110,18 @@ const mapStateToProps = state => {
     return {
         ings: state.burguerBuilder.ingredients,
         price: state.burguerBuilder.totalPrice,
-        error: state.burguerBuilder.error
+        error: state.burguerBuilder.error,
+        isAuthenticated: state.auth.token !== null,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onIngredientAdded: (igName) => dispatch(burguerBuilderActions.addIngredients(igName)),
-        onIngredientRemoved: (igName) => dispatch(burguerBuilderActions.removeIngredients(igName)),
-        onInitIngredient: () => dispatch(burguerBuilderActions.initIngredients()),
-        onInitPurchase: () => dispatch(burguerBuilderActions.purchaseInit())
+        onIngredientAdded: (igName) => dispatch(action.addIngredients(igName)),
+        onIngredientRemoved: (igName) => dispatch(action.removeIngredients(igName)),
+        onInitIngredient: () => dispatch(action.initIngredients()),
+        onInitPurchase: () => dispatch(action.purchaseInit()),
+        onsetAuthRedirectPath: (path) => dispatch(action.setAuthRedirectPath(path))
     }
 }
 
