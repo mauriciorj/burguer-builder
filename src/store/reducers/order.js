@@ -14,7 +14,7 @@ const reducer = (state = initialState, action) => {
             return updateObject(state, { purchased: false});
 
         case actionTypes.PURCHASE_BURGUER_START:
-            return updateObject(state, { loading: false});
+            return updateObject(state, { loading: true});
 
         case actionTypes.PURCHASE_BURGUER_SUCCESS:    
             const newOrder = {
