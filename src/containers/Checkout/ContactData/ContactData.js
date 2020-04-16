@@ -9,15 +9,6 @@ import * as actions from '../../../store/actions/index';
 
 class ContactData extends Component {
 
-    state = {
-        name: '',
-        email: '',
-        address: {
-            street: '',
-            postalCode: ''
-        }
-    }
-
     orderhandler = (event) => {
         event.preventDefault();
 
@@ -33,9 +24,11 @@ class ContactData extends Component {
                     country: 'Canada'
                 },
                 email: 'teste@teste.com'
-            }
+            },
+            userId: this.props.userId,
+            token: this.props.token
         }
-        this.props.onOrderBurguer(order, this.props.token);
+        this.props.onOrderBurguer(order, this.props.token, this.props.userId);
     }
 
     render() {
@@ -67,13 +60,14 @@ const mapStateToProps = state => {
         ings: state.burguerBuilder.ingredients,
         price: state.burguerBuilder.totalPrice,
         loading: state.order.loading,
-        token: state.auth.token
+        token: state.auth.token,
+        userId: state.auth.userId
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onOrderBurguer: (orderData, token) => dispatch(actions.purchaseBurguer(orderData, token))
+        onOrderBurguer: (orderData, token, userId) => dispatch(actions.purchaseBurguer(orderData, token, userId))
     }
 }
 
